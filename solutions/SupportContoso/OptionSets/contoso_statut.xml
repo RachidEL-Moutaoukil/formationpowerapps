@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<optionset Name="contoso_statut" localizedName="Statut" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <OptionSetType>picklist</OptionSetType>
+  <IsGlobal>1</IsGlobal>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <ExternalTypeName></ExternalTypeName>
+  <displaynames>
+    <displayname description="Statut" languagecode="1036" />
+  </displaynames>
+  <Descriptions>
+    <Description description="" languagecode="1036" />
+  </Descriptions>
+  <options>
+    <option value="330650000" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Nouveau" languagecode="1036" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1036" />
+      </Descriptions>
+    </option>
+    <option value="330650001" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="En cours" languagecode="1036" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1036" />
+      </Descriptions>
+    </option>
+    <option value="330650002" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="En attente" languagecode="1036" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1036" />
+      </Descriptions>
+    </option>
+    <option value="330650003" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Résolu" languagecode="1036" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1036" />
+      </Descriptions>
+    </option>
+    <option value="330650004" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Clôturé" languagecode="1036" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1036" />
+      </Descriptions>
+    </option>
+  </options>
+</optionset>

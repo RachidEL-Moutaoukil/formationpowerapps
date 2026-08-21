@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="business_unit_contoso_categorie" />
+  <EntityRelationship Name="business_unit_contoso_categorie1" />
+  <EntityRelationship Name="contoso_categorie_Categorie_contoso_categorie1" />
+  <EntityRelationship Name="lk_contoso_categorie_createdby" />
+  <EntityRelationship Name="lk_contoso_categorie_modifiedby" />
+  <EntityRelationship Name="lk_contoso_categorie1_createdby" />
+  <EntityRelationship Name="lk_contoso_categorie1_modifiedby" />
+  <EntityRelationship Name="owner_contoso_categorie" />
+  <EntityRelationship Name="owner_contoso_categorie1" />
+  <EntityRelationship Name="team_contoso_categorie" />
+  <EntityRelationship Name="team_contoso_categorie1" />
+  <EntityRelationship Name="TransactionCurrency_contoso_Categorie" />
+  <EntityRelationship Name="user_contoso_categorie" />
+  <EntityRelationship Name="user_contoso_categorie1" />
+</EntityRelationships>

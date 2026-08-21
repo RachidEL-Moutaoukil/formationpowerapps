@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<optionset Name="contoso_priorite" localizedName="Priorité" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <OptionSetType>picklist</OptionSetType>
+  <IsGlobal>1</IsGlobal>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <ExternalTypeName></ExternalTypeName>
+  <displaynames>
+    <displayname description="Priorité" languagecode="1036" />
+  </displaynames>
+  <Descriptions>
+    <Description description="" languagecode="1036" />
+  </Descriptions>
+  <options>
+    <option value="330650000" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Basse" languagecode="1036" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1036" />
+      </Descriptions>
+    </option>
+    <option value="330650001" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Normale" languagecode="1036" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1036" />
+      </Descriptions>
+    </option>
+    <option value="330650002" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Haute" languagecode="1036" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1036" />
+      </Descriptions>
+    </option>
+    <option value="330650003" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Critique" languagecode="1036" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1036" />
+      </Descriptions>
+    </option>
+  </options>
+</optionset>
