@@ -60,7 +60,7 @@ jobs:
           app-id: ${{ secrets.PP_CLIENT_ID }}
           client-secret: ${{ secrets.PP_CLIENT_SECRET }}
           tenant-id: ${{ secrets.PP_TENANT_ID }}
-          path: rollback-artifact/*.zip
+          solution-file: rollback-artifact/*.zip
           publish-changes: true
 
       - name: Résumé
