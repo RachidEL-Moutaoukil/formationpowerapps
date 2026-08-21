@@ -1,0 +1,43 @@
+name: deploy-to-test
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Backup Prod avant déploiement (pour rollback)
+        uses: microsoft/powerplatform-actions/backup-environment@v1
+        with:
+          environment-url: ${{ vars.PROD_URL }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+          backup-label: "pre-deploy-${{ github.sha }}"
+
+      - name: Pack solution
+        uses: microsoft/powerplatform-actions/pack-solution@v1
+        with:
+          solution-folder: solutions/MySolution
+          solution-file: out/MySolution.zip
+          solution-type: Managed
+
+      - name: Import dans Prod
+        uses: microsoft/powerplatform-actions/import-solution@v1
+        with:
+          environment-url: ${{ vars.PROD_URL }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+          path: out/MySolution.zip
+          settings-file: deploymentSettings.prod.json
+
+      - name: Sauvegarder le zip comme artefact release
+        uses: actions/upload-artifact@v4
+        with:
+          name: solution-${{ github.sha }}
+          path: out/MySolution.zip
+          retention-days: 90
