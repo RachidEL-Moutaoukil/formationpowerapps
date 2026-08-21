@@ -1,13 +1,20 @@
 name: deploy-dev-to-test
 
-# Déclenchement manuel : tu choisis quand pousser Dev -> Test
+# Déclenchement automatique (via Power Automate -> GitHub API) OU manuel
 on:
+  repository_dispatch:
+    types: [powerapps-change]
   workflow_dispatch:
     inputs:
       solution_name:
         description: "Nom (schema name) de la solution Dataverse"
         required: true
         default: "MaSolution"
+
+# Le nom de solution est fixe pour le déclenchement auto (repository_dispatch
+# n'a pas d'inputs comme workflow_dispatch), mais reste configurable en manuel
+env:
+  SOLUTION_NAME: ${{ inputs.solution_name || 'MaSolution' }}
 
 jobs:
   deploy:
@@ -40,16 +47,16 @@ jobs:
           app-id: ${{ secrets.PP_CLIENT_ID }}
           client-secret: ${{ secrets.PP_CLIENT_SECRET }}
           tenant-id: ${{ secrets.PP_TENANT_ID }}
-          solution-name: ${{ inputs.solution_name }}
-          solution-output-file: out/${{ inputs.solution_name }}_unmanaged.zip
+          solution-name: ${{ env.SOLUTION_NAME }}
+          solution-output-file: out/${{ env.SOLUTION_NAME }}_unmanaged.zip
           managed: false
 
       # 3. Unpack pour versionner le contenu en XML lisible dans Git
       - name: Unpack solution
         uses: microsoft/powerplatform-actions/unpack-solution@v1
         with:
-          solution-file: out/${{ inputs.solution_name }}_unmanaged.zip
-          solution-folder: solutions/${{ inputs.solution_name }}
+          solution-file: out/${{ env.SOLUTION_NAME }}_unmanaged.zip
+          solution-folder: solutions/${{ env.SOLUTION_NAME }}
           solution-type: Unmanaged
 
       # 4. Solution Checker : bloque le pipeline si erreurs critiques
@@ -60,7 +67,7 @@ jobs:
           app-id: ${{ secrets.PP_CLIENT_ID }}
           client-secret: ${{ secrets.PP_CLIENT_SECRET }}
           tenant-id: ${{ secrets.PP_TENANT_ID }}
-          path: out/${{ inputs.solution_name }}_unmanaged.zip
+          path: out/${{ env.SOLUTION_NAME }}_unmanaged.zip
           output-directory: out/checker-results
           error-level: HighAndCritical
 
@@ -72,8 +79,8 @@ jobs:
           app-id: ${{ secrets.PP_CLIENT_ID }}
           client-secret: ${{ secrets.PP_CLIENT_SECRET }}
           tenant-id: ${{ secrets.PP_TENANT_ID }}
-          solution-name: ${{ inputs.solution_name }}
-          solution-output-file: out/${{ inputs.solution_name }}_managed.zip
+          solution-name: ${{ env.SOLUTION_NAME }}
+          solution-output-file: out/${{ env.SOLUTION_NAME }}_managed.zip
           managed: true
 
       # 6. Sauvegarde de Test AVANT d'écraser quoi que ce soit (filet de sécurité rollback)
@@ -84,7 +91,7 @@ jobs:
           app-id: ${{ secrets.PP_CLIENT_ID }}
           client-secret: ${{ secrets.PP_CLIENT_SECRET }}
           tenant-id: ${{ secrets.PP_TENANT_ID }}
-          backup-label: "pre-deploy-${{ inputs.solution_name }}-${{ github.run_number }}"
+          backup-label: "pre-deploy-${{ env.SOLUTION_NAME }}-${{ github.run_number }}"
 
       # 7. Import dans Test
       - name: Import solution dans Test
@@ -94,18 +101,19 @@ jobs:
           app-id: ${{ secrets.PP_CLIENT_ID }}
           client-secret: ${{ secrets.PP_CLIENT_SECRET }}
           tenant-id: ${{ secrets.PP_TENANT_ID }}
-          path: out/${{ inputs.solution_name }}_managed.zip
-          settings-file: deploymentSettings.test.json
-          run-async: true
-          async-max-wait-time: 60
+          solution-file: out/${{ env.SOLUTION_NAME }}_managed.zip
+          use-deployment-settings-file: true
+          deployment-settings-file: deploymentSettings.test.json
+          run-asynchronously: true
+          max-async-wait-time: 60
           publish-changes: true
 
       # 8. Garde le zip managé comme artefact -> nécessaire pour le pipeline de rollback
       - name: Uploader le zip comme artefact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.solution_name }}-${{ github.run_number }}
-          path: out/${{ inputs.solution_name }}_managed.zip
+          name: ${{ env.SOLUTION_NAME }}-${{ github.run_number }}
+          path: out/${{ env.SOLUTION_NAME }}_managed.zip
           retention-days: 90
 
       # 9. Commit du dossier unpacked pour garder l'historique lisible dans Git
@@ -113,6 +121,6 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add solutions/${{ inputs.solution_name }}
-          git commit -m "Deploy ${{ inputs.solution_name }} vers Test (run ${{ github.run_number }})" || echo "Rien à commiter"
+          git add solutions/${{ env.SOLUTION_NAME }}
+          git commit -m "Deploy ${{ env.SOLUTION_NAME }} vers Test (run ${{ github.run_number }})" || echo "Rien à commiter"
           git push
