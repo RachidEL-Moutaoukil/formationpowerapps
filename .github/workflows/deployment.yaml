@@ -1,47 +1,118 @@
-name: deploy-to-test
+name: deploy-dev-to-test
+
+# Déclenchement manuel : tu choisis quand pousser Dev -> Test
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
+    inputs:
+      solution_name:
+        description: "Nom (schema name) de la solution Dataverse"
+        required: true
+        default: "MaSolution"
 
 jobs:
   deploy:
     runs-on: windows-latest
+    permissions:
+      contents: write   # nécessaire pour commit le zip / les fichiers unpackés
+
     steps:
       - uses: actions/checkout@v4
-    
-      - name: Installer le Power Platform CLI
+
+      # 0. Installe le Power Platform CLI - doit être la toute première étape,
+      #    avant tout autre action microsoft/powerplatform-actions
+      - name: Install Power Platform Tools
         uses: microsoft/powerplatform-actions/actions-install@v1
-    
-      - name: Backup Prod avant déploiement
+
+      # 1. Vérifie que l'auth vers Dev fonctionne avant d'aller plus loin
+      - name: Vérifier connexion Dev
+        uses: microsoft/powerplatform-actions/who-am-i@v1
+        with:
+          environment-url: ${{ vars.DEV_URL }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+
+      # 2. Export de la solution non managée depuis Dev
+      - name: Export solution depuis Dev
+        uses: microsoft/powerplatform-actions/export-solution@v1
+        with:
+          environment-url: ${{ vars.DEV_URL }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+          solution-name: ${{ inputs.solution_name }}
+          solution-output-file: out/${{ inputs.solution_name }}_unmanaged.zip
+          managed: false
+
+      # 3. Unpack pour versionner le contenu en XML lisible dans Git
+      - name: Unpack solution
+        uses: microsoft/powerplatform-actions/unpack-solution@v1
+        with:
+          solution-file: out/${{ inputs.solution_name }}_unmanaged.zip
+          solution-folder: solutions/${{ inputs.solution_name }}
+          solution-type: Unmanaged
+
+      # 4. Solution Checker : bloque le pipeline si erreurs critiques
+      - name: Solution Checker
+        uses: microsoft/powerplatform-actions/check-solution@v1
+        with:
+          environment-url: ${{ vars.DEV_URL }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+          path: out/${{ inputs.solution_name }}_unmanaged.zip
+          output-directory: out/checker-results
+          error-level: HighAndCritical
+
+      # 5. Ré-export en version managée (c'est ce qu'on déploie en Test/Prod)
+      - name: Export solution managée
+        uses: microsoft/powerplatform-actions/export-solution@v1
+        with:
+          environment-url: ${{ vars.DEV_URL }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+          solution-name: ${{ inputs.solution_name }}
+          solution-output-file: out/${{ inputs.solution_name }}_managed.zip
+          managed: true
+
+      # 6. Sauvegarde de Test AVANT d'écraser quoi que ce soit (filet de sécurité rollback)
+      - name: Backup environnement Test
         uses: microsoft/powerplatform-actions/backup-environment@v1
         with:
-          environment-url: ${{ vars.DEV_URL }}
+          environment-url: ${{ vars.TEST_URL }}
           app-id: ${{ secrets.PP_CLIENT_ID }}
           client-secret: ${{ secrets.PP_CLIENT_SECRET }}
           tenant-id: ${{ secrets.PP_TENANT_ID }}
-          backup-label: "pre-deploy-${{ github.sha }}"
+          backup-label: "pre-deploy-${{ inputs.solution_name }}-${{ github.run_number }}"
 
-
-      - name: Pack solution
-        uses: microsoft/powerplatform-actions/pack-solution@v1
-        with:
-          solution-folder: solutions/MySolution
-          solution-file: out/MySolution.zip
-          solution-type: Managed
-
-      - name: Import dans Prod
+      # 7. Import dans Test
+      - name: Import solution dans Test
         uses: microsoft/powerplatform-actions/import-solution@v1
         with:
-          environment-url: ${{ vars.DEV_URL }}
+          environment-url: ${{ vars.TEST_URL }}
           app-id: ${{ secrets.PP_CLIENT_ID }}
           client-secret: ${{ secrets.PP_CLIENT_SECRET }}
           tenant-id: ${{ secrets.PP_TENANT_ID }}
-          path: out/MySolution.zip
-          settings-file: deploymentSettings.prod.json
+          path: out/${{ inputs.solution_name }}_managed.zip
+          settings-file: deploymentSettings.test.json
+          run-async: true
+          async-max-wait-time: 60
+          publish-changes: true
 
-      - name: Sauvegarder le zip comme artefact release
+      # 8. Garde le zip managé comme artefact -> nécessaire pour le pipeline de rollback
+      - name: Uploader le zip comme artefact
         uses: actions/upload-artifact@v4
         with:
-          name: solution-${{ github.sha }}
-          path: out/MySolution.zip
+          name: ${{ inputs.solution_name }}-${{ github.run_number }}
+          path: out/${{ inputs.solution_name }}_managed.zip
           retention-days: 90
+
+      # 9. Commit du dossier unpacked pour garder l'historique lisible dans Git
+      - name: Commit solution unpacked
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add solutions/${{ inputs.solution_name }}
+          git commit -m "Deploy ${{ inputs.solution_name }} vers Test (run ${{ github.run_number }})" || echo "Rien à commiter"
+          git push
