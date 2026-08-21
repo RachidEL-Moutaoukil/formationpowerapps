@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{fb1bd5f4-bd5f-4bec-bfbd-7dd8a118cf0a}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form headerdensity="HighWithControls">
+      <tabs>
+        <tab verticallayout="true" id="{5CAC7267-7EC9-4119-9EE3-015D10F7B642}" IsUserDefined="1">
+          <labels>
+            <label description="Général" languagecode="1036" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{F6FACD47-27D6-4455-B13A-D05CB975F0AA}">
+                  <labels>
+                    <label description="Général" languagecode="1036" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{F4F6D8B2-D544-424D-849E-F0601C9B8690}">
+                        <labels>
+                          <label description="" languagecode="1036" />
+                        </labels>
+                        <control id="contoso_nouvellecolonne" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="contoso_Nouvellecolonne" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1071618B-3E65-4ED2-B466-B3F7AD601700}">
+                        <labels>
+                          <label description="Propriétaire" languagecode="1036" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="null_section_3" id="ab266c34-c280-4dd9-bf13-a8264fd212c1" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Nouvelle section" languagecode="1036" />
+                  </labels>
+                  <rows>
+                    <row />
+                    <row>
+                      <cell id="{8c84bd8b-143b-4bf5-9e02-bee96d9f9433}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Type d'actif" languagecode="1036" />
+                        </labels>
+                        <control id="contoso_typedactif" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="contoso_typedactif" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b849835e-b3dd-4c16-9bb5-e4f5c69b5eb0}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Statut" languagecode="1036" />
+                        </labels>
+                        <control id="statecode" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="statecode" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{995d48b9-c6fc-40f9-aec2-8a0f79f492d4}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Nom de l'actif" languagecode="1036" />
+                        </labels>
+                        <control id="contoso_nouvellecolonne" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="contoso_nouvellecolonne" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c499ac8d-2a67-4985-b048-685b92dd40c7}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Numéro de série" languagecode="1036" />
+                        </labels>
+                        <control id="contoso_numerodeserie" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="contoso_numerodeserie" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0c1f84d0-ff09-48a4-943a-cd9eace31450}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Coût" languagecode="1036" />
+                        </labels>
+                        <control id="contoso_cout" classid="{533B9E00-756B-4312-95A0-DC888637AC78}" datafieldname="contoso_cout" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{13eb8de4-f886-4a74-9b09-b3f7e9e6cfb5}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Marque / Modèle " languagecode="1036" />
+                        </labels>
+                        <control id="contoso_marquemodele" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="contoso_marquemodele" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{19eac4f0-3f6e-4f63-b98f-1d2e17702f82}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{2155c350-4485-4339-a26b-125a70974a9c}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1036" />
+              </labels>
+            </cell>
+            <cell id="{8227a528-6348-4805-801d-67a845747d0a}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1036" />
+              </labels>
+            </cell>
+            <cell id="{8307af35-52c4-4f32-8e89-183d76d1d82a}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1036" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <footer id="{9a274127-a6fe-4f2c-a227-243c99a6f0e7}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{ea936e12-2495-47da-8c28-fbc77fb95bd1}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1036" />
+              </labels>
+            </cell>
+            <cell id="{a8f03a1d-361e-45a1-ba1f-d8cf98a79394}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1036" />
+              </labels>
+            </cell>
+            <cell id="{7dc8d285-4bc6-4221-9974-4d36cddd3074}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1036" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </footer>
+      <DisplayConditions Order="0" FallbackForm="true">
+        <Everyone />
+      </DisplayConditions>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Informations" languagecode="1036" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Formulaire pour cette entité." languagecode="1036" />
+    </Descriptions>
+  </systemform>
+</forms>

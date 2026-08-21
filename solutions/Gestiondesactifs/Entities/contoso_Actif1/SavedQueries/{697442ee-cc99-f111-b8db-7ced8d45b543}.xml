@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>0</isdefault>
+    <savedqueryid>{697442ee-cc99-f111-b8db-7ced8d45b543}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="contoso_nouvellecolonne" select="1" icon="1" preview="1">
+        <row name="result" id="contoso_actif1id">
+          <cell name="contoso_nouvellecolonne" width="300" />
+          <cell name="contoso_typedactif" width="106" />
+          <cell name="contoso_numerodeserie" width="133" />
+          <cell name="contoso_cout" width="100" />
+          <cell name="contoso_statut" width="100" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="contoso_actif1">
+          <attribute name="contoso_actif1id" />
+          <attribute name="contoso_nouvellecolonne" />
+          <attribute name="createdon" />
+          <order attribute="contoso_nouvellecolonne" descending="false" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+            <condition attribute="contoso_statut" operator="eq" value="100000000" />
+          </filter>
+          <attribute name="contoso_typedactif" />
+          <attribute name="contoso_numerodeserie" />
+          <attribute name="contoso_cout" />
+          <attribute name="contoso_statut" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Actifs disponibles" languagecode="1036" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

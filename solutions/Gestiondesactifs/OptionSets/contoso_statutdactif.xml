@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<optionset Name="contoso_statutdactif" localizedName="Statut d'actif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <OptionSetType>picklist</OptionSetType>
+  <IsGlobal>1</IsGlobal>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <ExternalTypeName></ExternalTypeName>
+  <displaynames>
+    <displayname description="Statut d'actif" languagecode="1036" />
+  </displaynames>
+  <Descriptions>
+    <Description description="" languagecode="1036" />
+  </Descriptions>
+  <options>
+    <option value="100000000" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Disponible" languagecode="1036" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1036" />
+      </Descriptions>
+    </option>
+    <option value="100000001" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Attribué" languagecode="1036" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1036" />
+      </Descriptions>
+    </option>
+    <option value="100000002" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="En réparation" languagecode="1036" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1036" />
+      </Descriptions>
+    </option>
+    <option value="100000003" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Retiré" languagecode="1036" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1036" />
+      </Descriptions>
+    </option>
+  </options>
+</optionset>

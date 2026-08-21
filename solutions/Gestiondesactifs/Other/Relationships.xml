@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="business_unit_contoso_actif" />
+  <EntityRelationship Name="business_unit_contoso_actif1" />
+  <EntityRelationship Name="business_unit_contoso_attribution" />
+  <EntityRelationship Name="contoso_attribution_Actif_contoso_actif" />
+  <EntityRelationship Name="contoso_attribution_Employe_systemuser" />
+  <EntityRelationship Name="lk_contoso_actif_createdby" />
+  <EntityRelationship Name="lk_contoso_actif_modifiedby" />
+  <EntityRelationship Name="lk_contoso_actif1_createdby" />
+  <EntityRelationship Name="lk_contoso_actif1_modifiedby" />
+  <EntityRelationship Name="lk_contoso_attribution_createdby" />
+  <EntityRelationship Name="lk_contoso_attribution_modifiedby" />
+  <EntityRelationship Name="owner_contoso_actif" />
+  <EntityRelationship Name="owner_contoso_actif1" />
+  <EntityRelationship Name="owner_contoso_attribution" />
+  <EntityRelationship Name="team_contoso_actif" />
+  <EntityRelationship Name="team_contoso_actif1" />
+  <EntityRelationship Name="team_contoso_attribution" />
+  <EntityRelationship Name="TransactionCurrency_contoso_Actif1" />
+  <EntityRelationship Name="user_contoso_actif" />
+  <EntityRelationship Name="user_contoso_actif1" />
+  <EntityRelationship Name="user_contoso_attribution" />
+</EntityRelationships>
