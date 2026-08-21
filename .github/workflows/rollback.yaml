@@ -1,0 +1,100 @@
+name: rollback
+
+# Déclenchement manuel uniquement - on ne rollback jamais automatiquement
+on:
+  workflow_dispatch:
+    inputs:
+      rollback_type:
+        description: "Type de rollback"
+        required: true
+        type: choice
+        options:
+          - solution   # réimporte un zip managé précédent (rapide, ciblé)
+          - environment # restaure tout l'environnement à un backup (complet)
+      environment_url_var:
+        description: "Nom de la variable d'env cible (ex: TEST_URL, PROD_URL)"
+        required: true
+        default: "TEST_URL"
+      # --- utilisé seulement si rollback_type = solution ---
+      artifact_name:
+        description: "Nom exact de l'artefact GitHub à réimporter (ex: MaSolution-42)"
+        required: false
+      # --- utilisé seulement si rollback_type = environment ---
+      backup_datetime:
+        description: "Date/heure du backup à restaurer (format ISO, ex: 2026-08-20T14:30:00Z)"
+        required: false
+
+jobs:
+  # ============================================
+  # OPTION 1 : rollback ciblé - réimporte l'ancien zip managé
+  # Ne restaure pas les suppressions de champs/tables faites entre-temps
+  # ============================================
+  rollback-solution:
+    if: ${{ inputs.rollback_type == 'solution' }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Installe le Power Platform CLI - toute première étape obligatoire
+      - name: Install Power Platform Tools
+        uses: microsoft/powerplatform-actions/actions-install@v1
+
+      - name: Télécharger l'ancien zip managé
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: rollback-artifact
+
+      - name: Vérifier connexion
+        uses: microsoft/powerplatform-actions/who-am-i@v1
+        with:
+          environment-url: ${{ vars[inputs.environment_url_var] }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+
+      - name: Réimporter la version précédente
+        uses: microsoft/powerplatform-actions/import-solution@v1
+        with:
+          environment-url: ${{ vars[inputs.environment_url_var] }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+          path: rollback-artifact/*.zip
+          publish-changes: true
+
+      - name: Résumé
+        run: echo "Rollback solution terminé sur ${{ inputs.environment_url_var }} avec l'artefact ${{ inputs.artifact_name }}"
+
+  # ============================================
+  # OPTION 2 : rollback complet - restaure tout l'environnement à un backup
+  # Restaure data + métadonnées, mais écrase aussi toute donnée créée après le backup
+  # ============================================
+  rollback-environment:
+    if: ${{ inputs.rollback_type == 'environment' }}
+    runs-on: windows-latest
+    steps:
+      # Installe le Power Platform CLI - toute première étape obligatoire
+      - name: Install Power Platform Tools
+        uses: microsoft/powerplatform-actions/actions-install@v1
+
+      - name: Vérifier connexion
+        uses: microsoft/powerplatform-actions/who-am-i@v1
+        with:
+          environment-url: ${{ vars[inputs.environment_url_var] }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+
+      - name: Restaurer l'environnement au backup indiqué
+        uses: microsoft/powerplatform-actions/restore-environment@v1
+        with:
+          environment-url: ${{ vars[inputs.environment_url_var] }}
+          source-environment-url: ${{ vars[inputs.environment_url_var] }}
+          backup-datetime: ${{ inputs.backup_datetime }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+
+      - name: Résumé
+        run: echo "Environnement ${{ inputs.environment_url_var }} restauré au backup du ${{ inputs.backup_datetime }}"
