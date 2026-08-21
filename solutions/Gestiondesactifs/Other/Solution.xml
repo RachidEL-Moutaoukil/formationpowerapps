@@ -81,6 +81,7 @@
       <RootComponent type="1" schemaName="contoso_actif" behavior="0" />
       <RootComponent type="1" schemaName="contoso_actif1" behavior="0" />
       <RootComponent type="1" schemaName="contoso_attribution" behavior="0" />
+      <RootComponent type="1" schemaName="contoso_testpipeline" behavior="0" />
       <RootComponent type="1" schemaName="systemuser" behavior="1" />
       <RootComponent type="29" id="{0ae3613d-a199-f111-b8db-7ced8d45b543}" behavior="0" />
       <RootComponent type="62" schemaName="contoso_Gestiondesactifs" behavior="0" />
