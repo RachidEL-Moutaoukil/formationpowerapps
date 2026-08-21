@@ -12,7 +12,7 @@ jobs:
       - name: Backup Prod avant déploiement (pour rollback)
         uses: microsoft/powerplatform-actions/backup-environment@v1
         with:
-          environment-url: ${{ vars.PROD_URL }}
+          environment-url: ${{ vars.DEV_URL }}
           app-id: ${{ secrets.PP_CLIENT_ID }}
           client-secret: ${{ secrets.PP_CLIENT_SECRET }}
           tenant-id: ${{ secrets.PP_TENANT_ID }}
@@ -28,7 +28,7 @@ jobs:
       - name: Import dans Prod
         uses: microsoft/powerplatform-actions/import-solution@v1
         with:
-          environment-url: ${{ vars.PROD_URL }}
+          environment-url: ${{ vars.DEV_URL }}
           app-id: ${{ secrets.PP_CLIENT_ID }}
           client-secret: ${{ secrets.PP_CLIENT_SECRET }}
           tenant-id: ${{ secrets.PP_TENANT_ID }}
