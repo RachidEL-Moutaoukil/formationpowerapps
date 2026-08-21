@@ -8,15 +8,19 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Backup Prod avant déploiement (pour rollback)
+    
+      - name: Installer le Power Platform CLI
+        uses: microsoft/powerplatform-actions/actions-install@v1
+    
+      - name: Backup Prod avant déploiement
         uses: microsoft/powerplatform-actions/backup-environment@v1
         with:
-          environment-url: ${{ vars.DEV_URL }}
+          environment-url: ${{ vars.PROD_URL }}
           app-id: ${{ secrets.PP_CLIENT_ID }}
           client-secret: ${{ secrets.PP_CLIENT_SECRET }}
           tenant-id: ${{ secrets.PP_TENANT_ID }}
           backup-label: "pre-deploy-${{ github.sha }}"
+
 
       - name: Pack solution
         uses: microsoft/powerplatform-actions/pack-solution@v1
